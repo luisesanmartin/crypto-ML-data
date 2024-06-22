@@ -11,8 +11,8 @@ import utils_data_wrangling as utils
 
 print("1: Reading data...")
 
-#file = '../data/raw/data_10MIN_2024-06-19T13:20:00_2022-07-26T02:40:00.pkl'
-file = '../data/raw/data_min.pkl'
+file = '../data/raw/data_10MIN_2024-06-21T00:10:00_2022-07-27T13:50:00.pkl'
+#file = '../data/raw/data_min.pkl'
 with open(file, 'rb') as f:
 	data = pickle.load(f)
 
@@ -40,6 +40,8 @@ inc_price = [utils.price_increased_next(data_dic, time, 0) for time in times]
 # Satandardized close price
 close_prices = [data_dic[time]['price_close'] for time in times]
 standardizer = utils.fit_standardizer(close_prices)
+with open('../data/models/standardizer_prices.pkl', 'wb') as f:
+	pickle.dump(standardizer, f)
 close_prices_standardized = utils.standardize(close_prices, standardizer)
 
 # Price increase in last X observations
@@ -56,6 +58,8 @@ inc_vol = [utils.attribute_increased_for_time(data_dic, time, 'volume_traded') f
 # Standardized volume traded
 volumes = [data_dic[time]['volume_traded'] for time in times]
 standardizer = utils.fit_standardizer(volumes)
+with open('../data/models/standardizer_volumes.pkl', 'wb') as f:
+	pickle.dump(standardizer, f)
 volumes_standardized = utils.standardize(volumes, standardizer)
 
 # Volume increased in last X observations
@@ -72,6 +76,8 @@ inc_trades = [utils.attribute_increased_for_time(data_dic, time, 'trades_count')
 # Standardized N of trades
 trades = [data_dic[time]['trades_count'] for time in times]
 standardizer = utils.fit_standardizer(trades)
+with open('../data/models/standardizer_trades.pkl', 'wb') as f:
+	pickle.dump(standardizer, f)
 trades_standardized = utils.standardize(trades, standardizer)
 
 # Trade increased in last X observations
